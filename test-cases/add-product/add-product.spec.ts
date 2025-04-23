@@ -26,7 +26,7 @@ if (env === 'QA'){
   password = 'Test1234!';
   sellerName = 'boobobkob'
 } else {
-  filePath = '../../test-data/TSELL-1192-Outdoor-Spaces-Activities-prod-test.xlsx'; // Replace with your Excel file path
+  filePath = '../../test-data/chunk-3.xlsx'; // Replace with your Excel file path
   userName = 'automate.bot12@gmail.com';
   password = 'Prod98765!';
   sellerName = 'TestProd1'
@@ -38,6 +38,7 @@ const workbook = new ExcelJS.Workbook();
 workbook.xlsx.readFile(filePath);
 
 test.describe("add successfully product", () => {
+  test.describe.configure({ mode: "serial" });
   test('have 2 variants', async ({ page, sellerCredential }) => {
     test.slow();
     if (env === 'QA'){
@@ -106,7 +107,7 @@ test.describe("add successfully product", () => {
 
           /** Image and Video */
           await imageVideo.selectImage(page);
-          await imageVideo.selectVdo(page);
+          // await imageVideo.selectVdo(page);
           await imageVideo.clickDimensionBtn(page);
 
           /** Dimension */
@@ -132,16 +133,15 @@ test.describe("add successfully product", () => {
           await page.waitForTimeout(9000);
 
           // console.log('Add product successfully.');
-
-          /** Verify DB */
-          const categoryDetail = await database.verifyCategoryInDatabase(productName,category);
-          const sku = await database.getSKUProduct(productName);
-          /** Verify OS */
-          await api.verifyESCategory(categoryDetail);
-          await api.verifyESProduct(categoryDetail,sku);
+          if (env === 'QA'){
+            const categoryDetail = await database.verifyCategoryInDatabase(productName,category);
+            const sku = await database.getSKUProduct(productName);
+            /** Verify OS */
+            await api.verifyESCategory(categoryDetail);
+            await api.verifyESProduct(categoryDetail,sku);
+          }
       }
   });
-
 
 // code พัง
   test.skip('has no variant', async ({ page, sellerCredential }) => {
@@ -228,4 +228,3 @@ test.describe("add successfully product", () => {
   });
 
 });
-

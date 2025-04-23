@@ -5,19 +5,14 @@ export async function inputPriceSale(page) {
     await page.locator('input[name="productVariants.0.priceAndSale.price"]').first().type('6365.36');
     await page.locator('input[name="productVariants.1.priceAndSale.price"]').first().scrollIntoViewIfNeeded();
     await page.locator('input[name="productVariants.1.priceAndSale.price"]').first().type('2222.56');
-
-    await page.locator('tr.Table-module__tr--McqeC:nth-child(2) td:nth-child(4)').nth(0).click();
+    await page.locator('div[data-testid="productStatus[0]"]').click();
     await page.getByRole('option', { name: 'สินค้าสั่งผลิต/พรีออเดอร์'}).click();
 
     //await page.locator('tr.Table-module__tr--McqeC:nth-child(4) td:nth-child(4)').nth(1).click();
     
     // await page.locator('.Select-module__selectWrapper--wHTGk.Select-module__error--oUG0E.Select-module__inline--l3otI').nth(1).waitFor({ state: 'visible' });
     // await page.locator('.Select-module__selectWrapper--wHTGk.Select-module__error--oUG0E.Select-module__inline--l3otI').nth(1).click();
-    await page.locator('[data-test-id="virtuoso-scroller"]')
-    .locator('[data-test-id="virtuoso-item-list"]')
-    .locator('tr[data-index="1"]')
-    .locator('td.Table-module__td--AvfkC.Table-module__noPadding--hCd0t')
-    .click();
+    await page.locator('div[data-testid="productStatus[1]"]').click();
     
     await page.getByRole('option', { name: 'พร้อมจำหน่าย'}).click();
 

@@ -175,8 +175,8 @@ export async function selectProductType(page) {
  
     //await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] .relative input[placeholder="เลือกประเภทสินค้า"]').first().scrollIntoViewIfNeeded()
     //await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] .relative input[placeholder="เลือกประเภทสินค้า"]').first().click()
-    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] div.Select-module__selectWrapper--wHTGk').first().scrollIntoViewIfNeeded();
-    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] div.Select-module__selectWrapper--wHTGk').first().click();
+    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] [data-testid="productTypeId[0]"]').scrollIntoViewIfNeeded();
+    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] [data-testid="productTypeId[0]"]').click();
     await page.screenshot({
         path: 'test-results/scrollToTable.png',
         fullPage: true,
@@ -188,8 +188,8 @@ export async function selectProductType(page) {
     )
 
     //await page.getByPlaceholder('เลือกประเภทสินค้า').nth(1).click() 
-    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] div.Select-module__selectWrapper--wHTGk > div:nth-child(2)').first().scrollIntoViewIfNeeded();
-    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] div.Select-module__selectWrapper--wHTGk > div:nth-child(2)').first().click();
+    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] [data-testid="productTypeId[1]"]').scrollIntoViewIfNeeded();
+    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] [data-testid="productTypeId[1]"]').click();
     //await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] div.Select-module__selectWrapper--wHTGk').first().click();
 
     //await page.click(`[data-testid="สินค้าที่มีบริการประกอบ/ติดตั้งฟรีจากผู้ขาย"], [data-testid="Product Only"]`)
@@ -205,15 +205,15 @@ export async function selectProductCondition(page) {
     // await page.getByPlaceholder('เลือกเงื่อนไขสินค้า').first().scrollIntoViewIfNeeded()
     // await page.getByPlaceholder('เลือกเงื่อนไขสินค้า').first().click();
 
-    await page.waitForSelector('[data-test-id="virtuoso-item-list"] tr[data-index="0"] div.Select-module__selectWrapper--wHTGk', { state: 'visible' });
-    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] div.Select-module__selectWrapper--wHTGk').nth(1).scrollIntoViewIfNeeded();
-    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] div.Select-module__selectWrapper--wHTGk').nth(1).click({ force: true });
+    await page.waitForSelector('[data-test-id="virtuoso-item-list"] tr[data-index="0"] [data-testid="productConditionId[0]"]', { state: 'visible' });
+    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] [data-testid="productConditionId[0]"]').scrollIntoViewIfNeeded();
+    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="0"] [data-testid="productConditionId[0]"]').click({ force: true });
     await page.click(`[data-testid="ใหม่"], [data-testid="New"]`)
 
     // await page.waitForSelector('[data-test-id="virtuoso-item-list"] tr[data-index="1"] Select-module__inputWrapper--FCVCA .Select-module__open--em2v- Select-module__md--rUTXe', { state: 'visible' });
     // await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] Select-module__inputWrapper--FCVCA .Select-module__open--em2v- Select-module__md--rUTXe').nth(1).click({ force: true });
-    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] div.Select-module__selectWrapper--wHTGk > div:nth-child(2)').nth(1).click();
-    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] div.Select-module__selectWrapper--wHTGk > div:nth-child(2)').nth(1).click();
+    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] [data-testid="productConditionId[1]"]').click();
+    await page.locator('[data-test-id="virtuoso-item-list"] tr[data-index="1"] [data-testid="productConditionId[1]"]').click();
     await page.click(`[data-testid="ใหม่"], [data-testid="New"]`)
 
     await page.screenshot({
@@ -360,7 +360,7 @@ export async function addAllMetadata(
                         const listBoxItems = await page.$$(`[role="listbox"] li`) // Adjust the selector based on your HTML structure
                         await listBoxItems[0].click()
                         await page
-                        .locator('thead.Table-module__thead--E9YE2')
+                        .locator('thead')
                         .nth(1)
                         .click()
                     //await page.getByRole('option', { name: columnData[index],exact: true}).first().click();
@@ -510,17 +510,21 @@ export async function addAllMetadata(
                    let rowIndex = 16;  // Excel rows start at index 1
                    let expectedLists: string[] = [];
                    while (true) {
-                       const cell = columnData[rowIndex];  // Read the first column of the current row                
+                       const cell = columnData[rowIndex];  // Read the first column of the current row
+                       console.log(cell)                
                        if (!cell) {  // Check if the cell is empty or undefined
                        break;
                        }               
                        expectedLists.push(cell);
                        rowIndex++;
                    }
-
+                   
                    const options = await page.locator('li[data-testid]').evaluateAll(items => 
-                       items.map(item => item.textContent.trim())
+                       items.map(item => 
+                        item.textContent.trim()
+                       )
                    );
+                   console.log(options)
                    expect(options.length).toEqual(expectedLists.length);
                    const expectedListsSorted = expectedLists.sort()
                    const actualListsSorted = options.sort()
@@ -531,7 +535,7 @@ export async function addAllMetadata(
                     const listBoxItems = await page.$$(`[role="listbox"] li`) // Adjust the selector based on your HTML structure
                     await listBoxItems[0].click()
                     await page
-                    .locator('thead.Table-module__thead--E9YE2')
+                    .locator('thead')
                     .nth(1)
                     .click()
                 //await page.getByRole('option', { name: columnData[index],exact: true}).first().click();

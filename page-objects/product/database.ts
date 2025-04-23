@@ -6,9 +6,9 @@ import { test, expect } from '@playwright/test'
 export async function queryCategoryByProductName(productName){
     const client = new Client({
         user: 'kantaphit_ru',
-        host: 'qa-postgres-database.c4b9rlzojrt0.ap-southeast-1.rds.amazonaws.com',
-        database: 'product_db',
-        password: 'G-71xz:KhDK6aY@U',
+        host: 'rds-nonprod-p-02.cxvyhrstzs2y.ap-southeast-1.rds.amazonaws.com',
+        database: 'qa_postgres_pim_service',
+        password: 'g1{x18KNTa0JoN2R',
         port: 5432,
     });
     await client.connect();
@@ -22,9 +22,9 @@ export async function queryCategoryByProductName(productName){
 export async function querySkuByProductId(productName){
     const client = new Client({
         user: 'kantaphit_ru',
-        host: 'qa-postgres-database.c4b9rlzojrt0.ap-southeast-1.rds.amazonaws.com',
-        database: 'product_db',
-        password: 'G-71xz:KhDK6aY@U',
+        host: 'rds-nonprod-p-02.cxvyhrstzs2y.ap-southeast-1.rds.amazonaws.com',
+        database: 'qa_postgres_pim_service',
+        password: 'g1{x18KNTa0JoN2R',
         port: 5432,
     });
     await client.connect();

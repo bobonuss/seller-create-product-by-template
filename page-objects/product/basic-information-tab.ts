@@ -24,7 +24,6 @@ export async function selectCategory(page,category){
     const locator = await page.locator(`//div[@class="caption-4" and text()="${category.trim()}"]`);
     await locator.click({ text: `${category.trim()}`});
     await page.screenshot({ path: 'test-results/selectCategory.png', fullPage: true });
-
 }
 
 export async function addProductDescription(page,category){

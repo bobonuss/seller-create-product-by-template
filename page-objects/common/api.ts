@@ -4,7 +4,7 @@ import { Buffer } from "buffer";
 
 export async function queryESCategoryIndex(categoryDetail) {
   const username = "kantaphit_ru"; 
-  const password = "GB8Y75tG)o(2Zc-I"; 
+  const password = '}61zwiIjar6J307s'; 
   const authHeader = `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`;
   const requestBody = {
     query: {
@@ -16,21 +16,12 @@ export async function queryESCategoryIndex(categoryDetail) {
     },
   };
 
+  const apiRequest = await request.newContext({});
 
-  const apiRequest = await request.newContext({
-    extraHTTPHeaders: {
-      'Authorization': authHeader,
-      'Content-Type': 'application/json',
-    },
+  const response = await apiRequest.post('https://vpc-nocnoc-nonprod-os-data-blb3wnym55xediwt3i332ia6ia.ap-southeast-1.es.amazonaws.com/qa.product_category/_search', {
+    headers: { Authorization: authHeader  },
+    data: requestBody,
   });
-
-  // ส่งคำขอ POST ไปยัง API
-  const response = await apiRequest.post(
-    'https://vpc-nocnoc-nonprod-os-data-blb3wnym55xediwt3i332ia6ia.ap-southeast-1.es.amazonaws.com/qa.product_category/_search',
-    {
-      data: requestBody, // ข้อมูลที่ส่งไป
-    }
-  );
 
   // ตรวจสอบผลลัพธ์จาก response
   if (response.ok()) {
@@ -44,30 +35,23 @@ export async function queryESCategoryIndex(categoryDetail) {
 
 export async function queryESCProductIndex(sku) {
   const username = "kantaphit_ru"; 
-  const password = "GB8Y75tG)o(2Zc-I"; 
+  const password = '}61zwiIjar6J307s'; 
   const authHeader = `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`;
-    const requestBody = {
+  const requestBody = {
         query: {
             terms: {
                 skuNumber: sku
             }
         }
     }
-    
-    const apiRequest = await request.newContext({
-      extraHTTPHeaders: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json',
-      },
+    console.log(requestBody)
+    const apiRequest = await request.newContext({});
+
+    const response = await apiRequest.post('https://vpc-nocnoc-nonprod-os-data-blb3wnym55xediwt3i332ia6ia.ap-southeast-1.es.amazonaws.com/qa.scg_es_product_th/_search', {
+      headers: { Authorization: authHeader  },
+      data: requestBody,
     });
-  
-    // ส่งคำขอ POST ไปยัง API
-    const response = await apiRequest.post(
-      'https://vpc-nocnoc-nonprod-os-data-blb3wnym55xediwt3i332ia6ia.ap-southeast-1.es.amazonaws.com/qa.scg_es_product_th/_search',
-      {
-        data: requestBody, // ข้อมูลที่ส่งไป
-      }
-    );
+
     // ตรวจสอบผลลัพธ์จาก response
     if (response.ok()) {
       const data = await response.json();
