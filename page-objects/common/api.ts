@@ -2,7 +2,7 @@ import { request } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 import { Buffer } from "buffer";
 
-export async function queryESCategoryIndex(categoryDetail) {
+export async function queryOSCategoryIndex(categoryDetail) {
   const username = "kantaphit_ru"; 
   const password = '}61zwiIjar6J307s'; 
   const authHeader = `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`;
@@ -33,7 +33,7 @@ export async function queryESCategoryIndex(categoryDetail) {
   }
 }
 
-export async function queryESCProductIndex(sku) {
+export async function queryOSCProductIndex(sku) {
   const username = "kantaphit_ru"; 
   const password = '}61zwiIjar6J307s'; 
   const authHeader = `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`;
@@ -63,15 +63,15 @@ export async function queryESCProductIndex(sku) {
   }
 
 
-export async function verifyESCategory(categoryDetail) {
-    const apiData = await queryESCategoryIndex(categoryDetail)
+export async function verifyOSCategory(categoryDetail) {
+    const apiData = await queryOSCategoryIndex(categoryDetail)
     expect(apiData.categoryCode).toEqual(categoryDetail.category_code);
     expect(apiData.nameTh).toEqual(categoryDetail.name);
 }
 
-export async function verifyESProduct(categoryDetail,sku) {
+export async function verifyOSProduct(categoryDetail,sku) {
     const skuLists = sku.map(e=>e.sku)
-    const apiData = await queryESCProductIndex(skuLists)
+    const apiData = await queryOSCProductIndex(skuLists)
     if (apiData.length === 0) {
       console.error('API returned empty data:', apiData);
       throw new Error('API response is empty!');
