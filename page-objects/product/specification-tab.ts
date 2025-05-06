@@ -11,7 +11,7 @@ export async function selectBrand(page) {
         .getByText('ข้อมูลสินค้าเบื้องต้น')
         .scrollIntoViewIfNeeded()
     await page.getByPlaceholder('เลือกแบรนด์/ยี่ห้อ').click()
-    await page.getByRole('option', { name: 'Vhagar' }).click()
+    await page.getByRole('option', { name: 'icebear' }).click()
 }
 
 // /** fill model name */

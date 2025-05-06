@@ -22,9 +22,9 @@ let userName,password,sellerName
 
 if (env === 'QA'){
   filePath = '../../test-data/TSELL-1192-Outdoor-Spaces-Activities-qa-1.xlsx'; // Replace with your Excel file path
-  userName = 'automate.bot12@gmail.com';
+  userName = 'icebear.bot5@gmail.com';
   password = 'Test1234!';
-  sellerName = 'boobobkob'
+  sellerName = 'icebear5'
 } else {
   filePath = '../../test-data/chunk-3.xlsx'; // Replace with your Excel file path
   userName = 'automate.bot12@gmail.com';
