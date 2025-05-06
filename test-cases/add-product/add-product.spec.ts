@@ -21,7 +21,7 @@ let filePath
 let userName,password,sellerName
 
 if (env === 'QA'){
-  filePath = '../../test-data/TSELL-1263-Lighting-Lamps-Light-Bulbs-test.xlsx'; // Replace with your Excel file path
+  filePath = '../../test-data/TSELL-1192-Outdoor-Spaces-Activities-qa-1.xlsx'; // Replace with your Excel file path
   userName = 'automate.bot12@gmail.com';
   password = 'Test1234!';
   sellerName = 'boobobkob'
@@ -84,6 +84,7 @@ test.describe("add successfully product", () => {
 
           /** Specification */
           await specification.selectBrand(page);
+          // await specification.selectModelName(page);
           await specification.selectSellUnit(page,category);
           await specification.clickShowMoreMetadata(page);
           await specification.selectApplicationArea(page);
@@ -137,8 +138,8 @@ test.describe("add successfully product", () => {
             const categoryDetail = await database.verifyCategoryInDatabase(productName,category);
             const sku = await database.getSKUProduct(productName);
             /** Verify OS */
-            await api.verifyESCategory(categoryDetail);
-            await api.verifyESProduct(categoryDetail,sku);
+            await api.verifyOSCategory(categoryDetail);
+            await api.verifyOSProduct(categoryDetail,sku);
           }
       }
   });
