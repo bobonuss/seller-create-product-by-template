@@ -84,7 +84,7 @@ test.describe("add successfully product", () => {
 
           /** Specification */
           await specification.selectBrand(page);
-          // await specification.selectModelName(page);
+          await specification.selectModelName(page);
           await specification.selectSellUnit(page,category);
           await specification.clickShowMoreMetadata(page);
           await specification.selectApplicationArea(page);

@@ -14,14 +14,12 @@ export async function selectBrand(page) {
     await page.getByRole('option', { name: 'icebear' }).click()
 }
 
-// /** fill model name */
-// export async function selectModelName(page) {
-//     const modelNameLocator = page.locator('.tiptap');
-//     await modelNameLocator.waitFor({ state: 'visible' });
-//     await modelNameLocator.click();
-//     await page.keyboard.type('NocNoc model test', { delay: 1 });
-//     await page.screenshot({ path: `test-results/selectModelName.png`, fullPage: true });
-// }
+/** Model name */
+export async function selectModelName(page) {
+    await page.locator('[data-testid="ชื่อรุ่นหรือโมเดล"]').click();
+    await page.keyboard.type('NocNoc model test', { delay: 1 });
+    await page.screenshot({ path: `test-results/selectModelName.png`, fullPage: true });
+}
 
 export async function selectApplicationArea(page) {
     await page.getByTestId(`พื้นที่ใช้งาน`).first().scrollIntoViewIfNeeded();    

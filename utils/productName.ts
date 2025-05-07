@@ -6,5 +6,5 @@ import {generateRandomSixDigitNumber} from './randomNumber'
 
 export function genProductName(category){
     console.log(category)
-    return '[Do not approve] Autobot-'+ category.trim() +' '+ getCurrentDate() +'-'+ generateRandomSixDigitNumber();
+    return '[Do not approve] สินค้าQA-'+ category.trim() +' '+ getCurrentDate() +'-'+ generateRandomSixDigitNumber();
 }
