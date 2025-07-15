@@ -9,6 +9,7 @@ import * as dimension from '../../page-objects/product/dimension-tab.ts';
 import * as warranty from '../../page-objects/product/warranty-tab.ts';
 import * as database from '../../page-objects/product/database.ts';
 import * as api from '../../page-objects/common/api.ts';
+import * as excel from '../../page-objects/common/excel.ts';
 import { genProductName } from '../../utils/productName.ts';
 import { generateProductCode } from '../../utils/productCode.ts';
 import { test } from '../../test-config.ts';
@@ -21,7 +22,7 @@ let filePath
 let userName,password,sellerName
 
 if (env === 'QA'){
-  filePath = '../../test-data/TSELL-1192-Outdoor-Spaces-Activities-qa-1.xlsx'; // Replace with your Excel file path
+  filePath = '../../test-data/TSELL-1192-Outdoor-Spaces-Activities-qa-full.xlsx'; // Replace with your Excel file path
   userName = 'icebear.bot5@gmail.com';
   password = 'Test1234!';
   sellerName = 'icebear5'
@@ -34,7 +35,7 @@ if (env === 'QA'){
 
 let lang = 'th'; // lang = 'th' or 'en' only
 const ExcelJS = require('exceljs');
-const workbook = new ExcelJS.Workbook();  
+const workbook = new ExcelJS.Workbook();
 workbook.xlsx.readFile(filePath);
 
 test.describe("add successfully product", () => {
@@ -53,162 +54,76 @@ test.describe("add successfully product", () => {
     let countLoop = 0;
     const allSheetName =  readNameOfAllSheet(workbook,filePath);
     const sheetLength = await allSheetName.length;
+    const allResults: {
+      skuNumber: any;
+      productName: any;
+      category: any;
+    }[][] = [];
     console.log('lengthhhh: '+ sheetLength);
       for (let i = 0; i < sheetLength; i++) {
           console.log('Tab '+i+' : '+allSheetName[i]);
           countLoop += 1;
           console.log('Loop Count: ',countLoop);
-
+          const valueForm = {}
           /** Category */
           const category = returnCategoryName(workbook,lang,filePath,allSheetName[i]);
           console.log("cate: "+category) ;
           const productName = genProductName(category);
+          valueForm["webname"] = productName;
           console.log('product name = '+productName);
-          if (env === 'QA'){
-            await menu.gotoAddNewProduct(page,url.qa_product);
-          } else {
-            await menu.gotoAddNewProduct(page,url.prod_product);
-          }
-          await logins.closePopupTaskManage(page);
-          //await productsPage.verifyProductsManagementPage({page});
-          await productsPage.clickAddNewProductButton({page});
-
-          /** Basic Information */
-          await basicInformation.addProductName(page,productName,category);
-          await basicInformation.selectCategory(page,category.toString());
-          const expectCategory = returnExpectCategoryName(workbook,lang,filePath,allSheetName[i])
-          console.log('expectCategory: ', expectCategory);
-          basicInformation.verifyCategoryName(page, expectCategory)
-          await basicInformation.addProductDescription(page,category);
-          await basicInformation.clickSpecificationBtn(page);
-
-          /** Specification */
-          await specification.selectBrand(page);
-          await specification.selectModelName(page);
-          await specification.selectSellUnit(page,category);
-          await specification.clickShowMoreMetadata(page);
-          await specification.selectApplicationArea(page);
-          //await specification.selectManufacturingCount(page);
-          await specification.selectProductOptionYes(page);
-          await specification.addProductOptionValue(page,lang,category);
-          await specification.selectProductType(page);
-          await specification.selectProductCondition(page);
-          await specification.addAllMetadata(page,workbook,filePath,allSheetName[i],lang,2,category)
-          await specification.clickPriceInventBtn(page);
-
-          /** Price and Inventory */
-          test.slow();
-          await priceInvent.inputPriceSale(page);
-          const productCode1 = generateProductCode()+'11';
-          const productCode2 = generateProductCode()+'12';
-          console.log('Generated Product Code 1:', productCode1 + ' 2: '+ productCode2);
-          await priceInvent.inputProductCode(page,productCode1,productCode2);
-          await priceInvent.inputInventory(page,env);
-          await priceInvent.clickImgVdoBtn(page);
-
-          /** Image and Video */
-          await imageVideo.selectImage(page);
-          // await imageVideo.selectVdo(page);
-          await imageVideo.clickDimensionBtn(page);
-
-          /** Dimension */
-          await dimension.selectProductDimensionNo(page);
-          await dimension.inputProductDimensionDiff(page);
-          await dimension.selectPackageDimensionNo(page);
-          await dimension.inputPackageDimension(page);
-          await dimension.inputPackageDimensionOption(page);
-          await dimension.inputPackageDimensionOption2(page);
-          await dimension.clickSpecificationBtn(page);
-
-          /** Warranty */
-          await warranty.hasWarranty(page);
-          await warranty.hasReturnPolicy(page);
-
-          /** Save Draft */
-          //await productsPage.clickSaveBtn(page);
-          
-          /** Submit */
-          await productsPage.clickSubmitBtn(page);
-          await productsPage.clickConfirmModal(page);
-          await productsPage.verifySummittedProduct(page);
-          await page.waitForTimeout(9000);
-
-          // console.log('Add product successfully.');
-          if (env === 'QA'){
-            const categoryDetail = await database.verifyCategoryInDatabase(productName,category);
-            const sku = await database.getSKUProduct(productName);
-            /** Verify OS */
-            await api.verifyOSCategory(categoryDetail);
-            await api.verifyOSProduct(categoryDetail,sku);
-          }
-      }
-  });
-
-// code พัง
-  test.skip('has no variant', async ({ page, sellerCredential }) => {
-
-      console.log("has no variant");
-      test.slow();
-      await logins.sellerLogin(page,url.qa,sellerCredential.sellerUsername,sellerCredential.sellerPassword);
-      //await logins.sellerLogin(page,url.prod,sellerCredential.sellerUsername,sellerCredential.sellerPassword);
-      await logins.verifySuccessfulLogin(page,sellerCredential.sellerName);
-      await logins.closePopupTaskManage(page);
-      await logins.changeLang(page, lang)
-      let countLoop = 0;
-
-      const allSheetName =  readNameOfAllSheet(workbook,filePath);
-      const sheetLength = await allSheetName.length;
-      console.log('lengthhhh: '+ sheetLength);
-
-        for (let i = 0; i < sheetLength; i++) {
-            console.log('Tab '+i+' : '+allSheetName[i]);
-            countLoop += 1;
-            console.log('Loop Count: ',countLoop);
-  
-            // Skip Fan category for now 
-            if (countLoop == 12)
-              continue;
-  
-            /** Category */
-            const category = returnCategoryName(workbook,lang,filePath,allSheetName[i]);
-            console.log("cate: "+category) ;
-
-            const productName = genProductName(category);
-            console.log('product name = '+productName + ' 2');
-  
-            await menu.gotoAddNewProduct(page,url.qa_product);
-            //await menu.gotoAddNewProduct(page,url.prod_product);
+          try {
+            if (env === 'QA'){
+              await menu.gotoAddNewProduct(page,url.qa_product);
+            } else {
+              await menu.gotoAddNewProduct(page,url.prod_product);
+            }
+            await logins.closePopupTaskManage(page);
             //await productsPage.verifyProductsManagementPage({page});
             await productsPage.clickAddNewProductButton({page});
   
             /** Basic Information */
             await basicInformation.addProductName(page,productName,category);
             await basicInformation.selectCategory(page,category.toString());
+            const expectCategory = returnExpectCategoryName(workbook,lang,filePath,allSheetName[i])
+            console.log('expectCategory: ', expectCategory);
+            basicInformation.verifyCategoryName(page, expectCategory)
             await basicInformation.addProductDescription(page,category);
             await basicInformation.clickSpecificationBtn(page);
   
             /** Specification */
             await specification.selectBrand(page);
-            await specification.selectApplicationArea(page);
-            await specification.selectManufacturingCount(page);
+            await specification.selectModelName(page);
             await specification.selectSellUnit(page,category);
-            
-            await specification.selectProductOptionNo(page);
-            await specification.addAllMetadataIfSelectNo(page,workbook,filePath,allSheetName[i],lang);
+            await specification.clickShowMoreMetadata(page);
+            await specification.selectApplicationArea(page);
+            //await specification.selectManufacturingCount(page);
+            await specification.selectProductOptionYes(page);
+            await specification.addProductOptionValue(page,lang,category);
+            await specification.selectProductType(page);
+            await specification.selectProductCondition(page);
+            const techspecValue = await specification.addAllMetadata(page,workbook,filePath,allSheetName[i],lang,2,category,valueForm)
             await specification.clickPriceInventBtn(page);
   
             /** Price and Inventory */
-            // await priceInvent.inputPriceSaleNoVariant(page,productCode1);
+            test.slow();
+            await priceInvent.inputPriceSale(page);
+            const productCode1 = generateProductCode()+'11';
+            const productCode2 = generateProductCode()+'12';
+            console.log('Generated Product Code 1:', productCode1 + ' 2: '+ productCode2);
+            await priceInvent.inputProductCode(page,productCode1,productCode2);
+            await priceInvent.inputInventory(page,env);
             await priceInvent.clickImgVdoBtn(page);
   
             /** Image and Video */
-            await imageVideo.selectImageNovariant(page);
-            await imageVideo.selectVdoNoVaraint(page);
+            await imageVideo.selectImage(page);
+            // await imageVideo.selectVdo(page);
             await imageVideo.clickDimensionBtn(page);
   
             /** Dimension */
-            await dimension.inputProductDimensionSame(page);
-            await dimension.inputPackageDimensionOptionNovariant(page);
+            await dimension.selectProductDimensionNo(page);
+            await dimension.inputProductDimensionDiff(page);
+            await dimension.selectPackageDimensionNo(page);
+            await dimension.inputPackageDimension(page);
             await dimension.inputPackageDimensionOption(page);
             await dimension.inputPackageDimensionOption2(page);
             await dimension.clickSpecificationBtn(page);
@@ -216,16 +131,38 @@ test.describe("add successfully product", () => {
             /** Warranty */
             await warranty.hasWarranty(page);
             await warranty.hasReturnPolicy(page);
-            
-            /** Save Submit */
-            // await productsPage.clickSubmitBtn(page);
-
+  
             /** Save Draft */
-            await productsPage.clickSaveBtn(page);
-            await page.waitForTimeout(3000);
+            //await productsPage.clickSaveBtn(page);
+            
+            /** Submit */
+            await productsPage.clickSubmitBtn(page);
+            await productsPage.clickConfirmModal(page);
+            await productsPage.verifySummittedProduct(page);
+            await page.waitForTimeout(9000);
 
-            console.log('Add product successfully.');
-        }
+            if (env === 'QA'){
+              const categoryDetail = await database.verifyCategoryInDatabase(productName,category);
+              const sku = await database.getSKUProduct(productName);
+              
+              /** Verify OS */
+              await api.verifyOSCategory(categoryDetail,expectCategory);
+              const result = await api.verifyOSProduct(categoryDetail,sku,techspecValue);
+              allResults.push(result)
+            }
+          } catch (err) {
+            console.error(`${err.message}`);
+            const errorList = [
+              {
+                skuNumber: err.message.replace(/\u001b\[.*?m/g, ''),
+                productName:productName,
+                category: category
+              }
+            ]
+            allResults.push(errorList)
+            // เก็บ log เพิ่มหรือ push error ไว้รวบรวมทีหลังก็ได้
+          }
+      }
+      await excel.convertArrayToExcel(allResults)
   });
-
 });

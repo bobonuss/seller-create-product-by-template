@@ -39,6 +39,9 @@ where p.name = '${productName}';`);
 
 export async function verifyCategoryInDatabase(productName,category){
     const dbData = await queryCategoryByProductName(productName)
+    if (typeof dbData === 'undefined' || dbData === null) {
+        throw new Error("AI still not approve or rejected");
+      }
     const categoryName = dbData.name
     expect(categoryName).toEqual(category);
     return dbData

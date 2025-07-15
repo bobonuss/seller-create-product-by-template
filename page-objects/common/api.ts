@@ -44,7 +44,6 @@ export async function queryOSCProductIndex(sku) {
             }
         }
     }
-    console.log(requestBody)
     const apiRequest = await request.newContext({});
 
     const response = await apiRequest.post('https://vpc-nocnoc-nonprod-os-data-blb3wnym55xediwt3i332ia6ia.ap-southeast-1.es.amazonaws.com/qa.scg_es_product_th/_search', {
@@ -63,24 +62,62 @@ export async function queryOSCProductIndex(sku) {
   }
 
 
-export async function verifyOSCategory(categoryDetail) {
+export async function verifyOSCategory(categoryDetail,expectCategory) {
     const apiData = await queryOSCategoryIndex(categoryDetail)
+    const excelCateTreelists = expectCategory.split('>').map(item => item.trim());
+    const cateIndexCateTreeLists = apiData.categoryTree
+    //Verify catetree in category index
     expect(apiData.categoryCode).toEqual(categoryDetail.category_code);
     expect(apiData.nameTh).toEqual(categoryDetail.name);
+    cateIndexCateTreeLists.map((e,index)=>{
+      if(index === 0){
+        expect(e.nameTh).toEqual("สินค้า");
+      } else {
+        expect(e.nameTh).toEqual(excelCateTreelists[index-1]);
+      }
+    })
 }
 
-export async function verifyOSProduct(categoryDetail,sku) {
+export async function verifyOSProduct(categoryDetail,sku,techspecValue) {
     const skuLists = sku.map(e=>e.sku)
     const apiData = await queryOSCProductIndex(skuLists)
     if (apiData.length === 0) {
       console.error('API returned empty data:', apiData);
       throw new Error('API response is empty!');
     } else {
+      const resultLists: {
+        skuNumber: any;
+        productName: any;
+        category: any;
+      }[] = [];
       apiData.map(e=>{
       const data = e._source
       expect(data.primaryCategoryName_en).toEqual(categoryDetail.name_en);
       expect(data.primaryCategoryName_th).toEqual(categoryDetail.name);
       expect(String(data.primaryCategory.o_id[0])).toEqual(categoryDetail.category_code);
+      for (const [key, expectedValue] of Object.entries(techspecValue)) {
+        const actualValue = data[key];
+      
+        let valueToCompare;
+      
+        if (Array.isArray(actualValue)) {
+          // ถ้าเป็น array → ดึง value ของทุกอันมารวมเป็น string (หรือ array ถ้าต้องการ)
+          valueToCompare = actualValue.map(item => item?.value).join(', ');
+        } else if (typeof actualValue === 'object' && actualValue !== null && 'value' in actualValue) {
+          valueToCompare = actualValue.value;
+        } else {
+          valueToCompare = actualValue;
+        }
+      
+        expect(valueToCompare).toBe(expectedValue);
+      }
+      const resultObject = {
+        "skuNumber": data.skuNumber,
+        "productName": data.webname,
+        "category": data.primaryCategoryName_th
+      }
+      resultLists.push(resultObject)
     })
+    return resultLists
     }
 }

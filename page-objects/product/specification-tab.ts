@@ -56,7 +56,8 @@ export async function selectManufacturingCount(page) {
 export async function selectSellUnit(page,category) {
     //await page.locator('[data-testid="หน่วยการขาย"]').highlight();
     await page.locator('[data-testid="หน่วยการขาย"]').click({ force: true });
-    await page.pause();
+    await page.waitForTimeout(1000);
+    // await page.pause();
     await page.screenshot({
         path: `test-results/${category}/clickSellUnit.png`,
         fullPage: true,
@@ -236,10 +237,10 @@ export async function addAllMetadata(
     sheetName,
     lang,
     variantNumber,
-    category
+    category,
+    valueForm
 ) {
     const colCount = await getColumnCount(filePath, workbook, sheetName) // count column is not null
-
     // console.log('colCount:', colCount);
     // console.log('getRandomNumber',getRandomNumber(colLength));
     // console.log('columnData['+i+']:', columnName, columnData[i]);
@@ -274,7 +275,7 @@ export async function addAllMetadata(
             // for(let y=0; y < colLength ; y++){
             //     console.log('col data '+y+' :', columnData[y]);
             // }
-
+            console.log('col data 10: ', columnData[10])
             console.log('col data 11: ', columnData[11])
             let index = await getRandomNumber(colLength)
             console.log('index:', index)
@@ -312,14 +313,14 @@ export async function addAllMetadata(
                     items.map(item => item.textContent.trim())
                 );
             
-                
+
                 expect(options.length).toEqual(expectedLists.length);
                 const expectedListsSorted = expectedLists.sort()
                 const actualListsSorted = options.sort()
                 expect(expectedListsSorted).toEqual(actualListsSorted);
                 console.log('Verify Selective PRoduct Element Pass')
-
                 await page.getByTestId(columnData[16].trim()).first().click()
+                valueForm[columnData[10]] = columnData[16].trim()
                 //await page.getByRole('option', { name: columnData[index],exact: true }).first().click();
                 await page.screenshot({
                     path: `test-results/${category}/metadata-selective-product.png`,
@@ -370,6 +371,8 @@ export async function addAllMetadata(
                         .locator('thead')
                         .nth(1)
                         .click()
+                        const firstText = await listBoxItems[0].evaluate(el => el.textContent.trim());
+                        valueForm[columnData[10]] = firstText
                     //await page.getByRole('option', { name: columnData[index],exact: true}).first().click();
                     // await page.getByTestId(`${columnData[index].trim()}`, { exact: true }).nth(0).scrollIntoViewIfNeeded();
                     // await page.getByTestId(`${columnData[index].trim()}`, { exact: true }).nth(0).click();
@@ -417,6 +420,7 @@ export async function addAllMetadata(
                     .getByTestId(`${columnData[11].trim()}`)
                     .first()
                     .type('Robocrop')
+                valueForm[columnData[10]] = "Robocrop"
                 await page.screenshot({
                     path: `test-results/${category}/metadata-FreeText-Product.png`,
                     fullPage: true,
@@ -448,6 +452,7 @@ export async function addAllMetadata(
                     .getByTestId(columnData[11].trim())
                     .nth(1)
                     .type('xxxxxx')
+                valueForm[columnData[10]] = "xxxxxx"
                 await page.screenshot({
                     path: `test-results/${category}/metadata-FreeText-Variant-1.png`,
                     fullPage: true,
@@ -495,6 +500,12 @@ export async function addAllMetadata(
                     .getByTestId(`${columnData[11].trim()}`)
                     .first()
                     .click()
+
+                    const text = await page
+                    .getByTestId(`${columnData[11].trim()}`)
+                    .first()
+                    .textContent();
+                valueForm[columnData[10]] = text?.trim()
                 await page.screenshot({
                     path: `test-results/${category}/screenshot-C2-5.png`,
                     fullPage: true,
@@ -545,6 +556,8 @@ export async function addAllMetadata(
                     .locator('thead')
                     .nth(1)
                     .click()
+                    const firstText = await listBoxItems[0].evaluate(el => el.textContent.trim());
+                    valueForm[columnData[10]] = firstText
                 //await page.getByRole('option', { name: columnData[index],exact: true}).first().click();
                 // await page.getByTestId(`${columnData[index].trim()}`, { exact: true }).nth(0).scrollIntoViewIfNeeded();
                 // await page.getByTestId(`${columnData[index].trim()}`, { exact: true }).nth(0).click();
@@ -623,6 +636,7 @@ export async function addAllMetadata(
                     .scrollIntoViewIfNeeded()
                 await page.getByTestId(columnData[11].trim()).first().click()
                 await page.getByTestId(columnData[11].trim()).first().type('2')
+                valueForm[columnData[10]] = 2
                 await page.screenshot({
                     path: `test-results/${category}/screenshot-C2-4-1.png`,
                     fullPage: true,
@@ -637,7 +651,7 @@ export async function addAllMetadata(
                 await page.getByTestId(columnData[11].trim()).nth(0).click()
                 await page.getByTestId(columnData[11].trim()).nth(0).type('3')
                 //expect(page.getByTestId(columnData[11].trim()).nth(0)).toHaveText('3');
-
+                valueForm[columnData[10]] = 3
 
                 await page
                     .getByTestId(columnData[11].trim())
@@ -645,6 +659,7 @@ export async function addAllMetadata(
                 await page.getByTestId(columnData[11].trim()).nth(1).click()
                 await page.getByTestId(columnData[11].trim()).nth(1).type('6')
                 //expect(page.getByTestId(columnData[11].trim()).nth(1)).toHaveText('6');
+                valueForm[columnData[10]] = 6
 
                 await page.screenshot({
                     path: `test-results/${category}/metadata-integer-Variant-1.png`,
@@ -659,6 +674,7 @@ export async function addAllMetadata(
                     .scrollIntoViewIfNeeded()
                 await page.getByTestId(columnData[11].trim()).first().click()
                 await page.getByTestId(columnData[11].trim()).first().type('1.11')
+                valueForm[columnData[10]] = 1.11
                 await page.screenshot({
                     path: `test-results/${category}/screenshot-C2-4-1.png`,
                     fullPage: true,
@@ -697,6 +713,7 @@ export async function addAllMetadata(
                     .first()
                     .click()
                     await page.getByTestId(`${columnData[11].trim()}`+`[${j}]`).type('3.24')
+                    valueForm[columnData[10]] = 3.24
                 await page.screenshot({
                     path: `test-results/${category}/metadata-interger-Variant-${j}.png`,
                     fullPage: true,
@@ -708,7 +725,9 @@ export async function addAllMetadata(
         if (lang == 'en' && i % 2 == 0) {
             console.log('EN Selected Column Labels:', columnLabel)
         }
+
     }
+    return valueForm
 }
 
 export async function clickPriceInventBtn(page) {
@@ -765,8 +784,8 @@ export async function addAllMetadataIfSelectNo(
             // for(let y=0; y < colLength ; y++){
             //     console.log('col data '+y+' :', columnData[y]);
             // }
+            console.log('col data 10: ', columnData[10])
 
-            console.log('col data 11: ', columnData[11])
 
             let index = await getRandomNumber(colLength)
             console.log('index:', index)
