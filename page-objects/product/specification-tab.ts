@@ -645,26 +645,44 @@ export async function addAllMetadata(
 
             if (metadataType === 'Integer' && level === 'Variant') {
                 //const columnName1 = "กรอกรายละเอียด" + columnData[11];
-                await page
-                    .getByTestId(columnData[11].trim())
-                    .nth(0).scrollIntoViewIfNeeded()
-                await page.getByTestId(columnData[11].trim()).nth(0).click()
-                await page.getByTestId(columnData[11].trim()).nth(0).type('3')
-                //expect(page.getByTestId(columnData[11].trim()).nth(0)).toHaveText('3');
-                valueForm[columnData[10]] = 3
+                // await page
+                //     .getByTestId(columnData[11].trim())
+                //     .nth(0).scrollIntoViewIfNeeded()
+                // await page.getByTestId(columnData[11].trim()).nth(0).click()
+                // await page.getByTestId(columnData[11].trim()).nth(0).type('3')
+                // //expect(page.getByTestId(columnData[11].trim()).nth(0)).toHaveText('3');
+                // valueForm[columnData[10]] = 3
 
-                await page
-                    .getByTestId(columnData[11].trim())
-                    .nth(1).scrollIntoViewIfNeeded()
-                await page.getByTestId(columnData[11].trim()).nth(1).click()
-                await page.getByTestId(columnData[11].trim()).nth(1).type('6')
-                //expect(page.getByTestId(columnData[11].trim()).nth(1)).toHaveText('6');
-                valueForm[columnData[10]] = 6
+                // await page
+                //     .getByTestId(columnData[11].trim())
+                //     .nth(1).scrollIntoViewIfNeeded()
+                // await page.getByTestId(columnData[11].trim()).nth(1).click()
+                // await page.getByTestId(columnData[11].trim()).nth(1).type('6')
+                // //expect(page.getByTestId(columnData[11].trim()).nth(1)).toHaveText('6');
+                // valueForm[columnData[10]] = 6
 
+                // await page.screenshot({
+                //     path: `test-results/${category}/metadata-integer-Variant-1.png`,
+                //     fullPage: true,
+                // })
+
+                for (let j = 0; j < variantNumber; j++) {
+                    await page
+                    .getByTestId(`${columnData[11].trim()}`+`[${j}]`)
+                    .first()
+                    .scrollIntoViewIfNeeded()
+                    await page
+                    .getByTestId(`${columnData[11].trim()}`+`[${j}]`)
+                    .first()
+                    .click()
+                    await page.getByTestId(`${columnData[11].trim()}`+`[${j}]`).type('6')
+                    valueForm[columnData[10]] = 6
                 await page.screenshot({
-                    path: `test-results/${category}/metadata-integer-Variant-1.png`,
+                    path: `test-results/${category}/metadata-interger-Variant-${j}.png`,
                     fullPage: true,
                 })
+                
+            }
             }
 
             if (metadataType === 'Numeric' && level === 'Product') {
