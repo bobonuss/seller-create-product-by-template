@@ -319,8 +319,8 @@ export async function addAllMetadata(
                 const actualListsSorted = options.sort()
                 expect(expectedListsSorted).toEqual(actualListsSorted);
                 console.log('Verify Selective PRoduct Element Pass')
-                await page.getByTestId(columnData[16].trim()).first().click()
-                valueForm[columnData[10]] = columnData[16].trim()
+                await page.getByTestId(columnData[16].toString().trim()).first().click()
+                valueForm[columnData[10]] = columnData[16].toString().trim()
                 //await page.getByRole('option', { name: columnData[index],exact: true }).first().click();
                 await page.screenshot({
                     path: `test-results/${category}/metadata-selective-product.png`,
