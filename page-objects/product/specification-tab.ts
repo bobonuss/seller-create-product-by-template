@@ -305,7 +305,7 @@ export async function addAllMetadata(
                     if (!cell) {  // Check if the cell is empty or undefined
                       break;
                     }               
-                    expectedLists.push(cell);
+                    expectedLists.push(cell.toString());
                     rowIndex++;
                   }
 
