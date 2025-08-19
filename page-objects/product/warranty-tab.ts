@@ -20,7 +20,7 @@ export async function noReturnPolicy(page) {
 }
 
 export async function hasReturnPolicy(page) {
-    await page.locator('input[name="warranty\.hasReturnPolicy"][value="yes"]').click();
+    await page.locator('input[name="warranty\.hasReturnPolicy"][value="yes"]').click({force: true});
     await page.locator('textarea[name="warranty\.returnPolicy"]').type('xxx return Policy xxx');
     await page.screenshot({ path: 'test-results/hasReturnPolicy.png', fullPage: true });
 }

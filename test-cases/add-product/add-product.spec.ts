@@ -16,18 +16,18 @@ import { test } from '../../test-config.ts';
 import { readNameOfAllSheet, returnCategoryName, returnExpectCategoryName }  from '../../utils/readExcel.ts';
 import { url } from '../../test-data/url.ts'
 
-const env = 'QA'
+const env = 'PROD'
 //const env = ''
 let filePath
 let userName,password,sellerName
 
 if (env === 'QA'){
-  filePath = '../../test-data/TSELL-1192-Outdoor-Spaces-Activities-qa-full.xlsx'; // Replace with your Excel file path
+  filePath = '../../test-data/1647-1.xlsx'; // Replace with your Excel file path
   userName = 'icebear.bot5@gmail.com';
   password = 'Test1234!';
   sellerName = 'icebear5'
 } else {
-  filePath = '../../test-data/chunk-3.xlsx'; // Replace with your Excel file path
+  filePath = '../../test-data/1647-2-3.xlsx'; // Replace with your Excel file path
   userName = 'automate.bot12@gmail.com';
   password = 'Prod98765!';
   sellerName = 'TestProd1'
@@ -139,7 +139,7 @@ test.describe("add successfully product", () => {
             await productsPage.clickSubmitBtn(page);
             await productsPage.clickConfirmModal(page);
             await productsPage.verifySummittedProduct(page);
-            await page.waitForTimeout(9000);
+            await page.waitForTimeout(1000);
 
             if (env === 'QA'){
               const categoryDetail = await database.verifyCategoryInDatabase(productName,category);
@@ -149,6 +149,19 @@ test.describe("add successfully product", () => {
               await api.verifyOSCategory(categoryDetail,expectCategory);
               const result = await api.verifyOSProduct(categoryDetail,sku,techspecValue);
               allResults.push(result)
+            }else{
+              const resultLists: {
+                skuNumber: any;
+                productName: any;
+                category: any;
+              }[] = [];
+              const resultObject = {
+                "skuNumber": "",
+                "productName": productName,
+                "category": category
+              }
+              resultLists.push(resultObject)
+              allResults.push(resultLists)
             }
           } catch (err) {
             console.error(`${err.message}`);
