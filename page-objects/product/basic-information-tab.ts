@@ -21,7 +21,7 @@ export async function verifyBasicInformationTab(page) {
 export async function selectCategory(page,category){
     await page.getByPlaceholder('เลือกหรือพิมพ์เพื่อค้นหาหมวดหมู่สินค้า').click();
     await page.getByPlaceholder('เลือกหรือพิมพ์เพื่อค้นหาหมวดหมู่สินค้า').type(category.trim());
-    const locator = await page.locator(`//div[@class="caption-4" and text()="${category.trim()}"]`);
+    const locator = await page.locator(`//div[text()="${category.trim()}"]`);
     await locator.click({ timeout: 5000 , text: `${category.trim()}`});
     await page.screenshot({ path: 'test-results/selectCategory.png', fullPage: true });
 }
