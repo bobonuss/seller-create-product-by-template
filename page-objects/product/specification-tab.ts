@@ -3,7 +3,6 @@ import { getRandomNumber } from '../../utils/randomIndex.ts'
 import { createHash } from 'crypto'
 import { expect } from '@playwright/test';
 
-
 /** Select brand */
 export async function selectBrand(page) {
     await page
@@ -35,12 +34,12 @@ export async function selectApplicationArea(page) {
 
     // await page.getByRole('option', { name: 'ภายนอก' || 'Outdoor'}).click();
     // await page.getByRole('option', { name: 'ห้องนั่งเล่น' || 'Living Room'}).first().click();
-
-    await page
-        .locator('label.label-2')
-        .filter({ hasText: 'พื้นที่ใช้งาน' })
-        .first()
-        .click()
+    await page.getByTestId(`พื้นที่ใช้งาน`).first().click();
+    // await page
+    //     .locator('label.label-2')
+    //     .filter({ hasText: 'พื้นที่ใช้งาน' })
+    //     .first()
+    //     .click()
 }
 
 export async function selectManufacturingCount(page) {
@@ -102,7 +101,7 @@ export async function addProductOptionValue(page, lang,category) {
 
     //await page.click(`text=สี, text=Color`);
     //await page.getByRole('option', { name: 'สี' || 'Color'}).click();
-    await page.click(`[data-testid="Color"], [data-testid="สี"]`)
+    await page.click(`[data-testid="Color"], [data-testid="สี"]`, { timeout: 3000 })
 
     // const optionName = lang === 'th' ? 'สี' : 'Color';
     // await page.getByRole('option', { name: optionName }).click();
@@ -138,7 +137,7 @@ export async function addProductOptionValue(page, lang,category) {
     // const optionName2 = lang === 'th' ? 'ขนาด' : 'Size';
     // await page.getByRole('option', { name: optionName2 }).click();
 
-    await page.click(`[data-testid="ขนาด"], [data-testid="Size"], [data-testid="ไซส์"], [data-testid="สไตล์"]`)
+    await page.click(`[data-testid="ขนาด"], [data-testid="Size"], [data-testid="ไซส์"], [data-testid="สไตล์"]`, { timeout: 3000 })
     //wait page.getByRole('option', { name: 'ขนาด' || 'Size'}).click();
 
     await page

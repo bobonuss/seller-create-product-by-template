@@ -1,10 +1,10 @@
 
 export async function inputPriceSale(page) {
 
-    await page.locator('input[name="productVariants.0.priceAndSale.price"]').first().scrollIntoViewIfNeeded();
-    await page.locator('input[name="productVariants.0.priceAndSale.price"]').first().type('6365.36');
-    await page.locator('input[name="productVariants.1.priceAndSale.price"]').first().scrollIntoViewIfNeeded();
-    await page.locator('input[name="productVariants.1.priceAndSale.price"]').first().type('2222.56');
+    await page.locator('input[data-testid="price[0]"]').scrollIntoViewIfNeeded();
+    await page.locator('input[data-testid="price[0]"]').type('6365.36');
+    await page.locator('input[data-testid="price[1]"]').scrollIntoViewIfNeeded();
+    await page.locator('input[data-testid="price[1]"]').type('2222.56');
     await page.locator('div[data-testid="productStatus[0]"]').click();
     await page.getByRole('option', { name: 'สินค้าสั่งผลิต/พรีออเดอร์'}).click();
 
