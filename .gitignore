@@ -4,6 +4,12 @@ playwright/.cache/
 test-results/
 test-cases/add-product/test-results
 
+# HTML reports
+*.html
+report.html
+test-report.html
+playwright-report.html
+
 # โฟลเดอร์ dependencies
 node_modules/
 bower_components/
@@ -32,4 +38,7 @@ desktop.ini
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Kiro IDE folder
+.kiro/
 

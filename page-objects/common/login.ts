@@ -13,6 +13,7 @@ export async function sellerLogin(page, url, userName, password) {
 
 export async function verifySuccessfulLogin(page, sellerName){
     await expect(page.locator('div.text-ellipsis')).toHaveText(sellerName);
+    console.log('✅ Successfully logged in!');
     console.log('sellerName: ',await page.locator('div.text-ellipsis').textContent())
     await page.screenshot({ path: 'test-results/qaVerifySuccessfulLogin.png', fullPage: true });
 }
@@ -26,34 +27,6 @@ export async function changeLang(page, lang) {
     } else await page.click('[data-testid="lang-en"]');
 }
 
-
-//  export async function closePopupTaskManage(page) {
-//     const element = await page.locator('[data-testid="task-manager-notification-acknowledge"]');
-//     console.log('Popup task manager ', element);
-
-//     if (element) {
-//         try {
-//             await page.click('[data-testid="task-manager-notification-acknowledge"]');
-//             console.log('Close popup');
-//         }catch (error) {
-//             console.log('Error while closing task manager popup:', error.message);
-//             // Handle the error or do nothing, depending on your use case
-//         }
-//     }
-//     await page.screenshot({ path: 'test-results/closePopupTaskManage.png', fullPage: false });
-
-// }
-// export async function closePopupTaskManage(page) {
-//     const taskManageButton = await page.locator('text=เข้าใจแล้ว');
-
-//     if (await taskManageButton.isVisible()) {
-//         await taskManageButton.click();
-//         console.log('Clicked on "เข้าใจแล้ว" button.');
-//     } else {
-//         console.log('The "เข้าใจแล้ว" button is not visible on the page.');
-//     }
-    
-// }
 
 export async function closePopupTaskManage(page) {
     try {

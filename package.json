@@ -11,9 +11,13 @@
   "scripts": {},
   "dependencies": {
     "@estruyf/github-actions-reporter": "^1.3.0",
+    "@types/pg": "^8.15.5",
     "csv-parse": "^5.5.0",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.3.1",
-    "exceljs": "^4.4.0"
+    "exceljs": "^4.4.0",
+    "pg": "^8.16.3",
+    "typescript": "^5.9.2",
+    "xlsx": "^0.18.5"
   }
 }
