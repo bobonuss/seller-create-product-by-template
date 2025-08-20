@@ -21,7 +21,7 @@ export async function selectPackageDimensionYes(page) {
 
 /** Package Dimension */
 export async function inputPackageDimension(page) {
-    await page.locator('input[id="productPackage.hasSamePackageDimension"][value="yes"]').click({force : true});
+    await page.locator('input[id="productPackage.hasSamePackageDimension"][value="yes"]').click();
     await page.locator('input[name="productVariants.0.packageDetails.0.width"]').type('3.6');
     await page.locator('input[name="productVariants.0.packageDetails.0.length"]').type('5.6');
     await page.locator('input[name="productVariants.0.packageDetails.0.height"]').type('8.6');
@@ -57,7 +57,7 @@ export async function inputPackageDimensionOption2(page) {
 }
 
 export async function selectProductDimensionNo(page) {
-    await page.locator('input[id="productPackage.hasSameDimension"][value="no"]').click({force : true});
+    await page.locator('input[id="productPackage.hasSameDimension"][value="no"]').click();
 
 }
 
