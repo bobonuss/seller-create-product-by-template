@@ -38,7 +38,7 @@ let lang = 'th'; // lang = 'th' or 'en' only
 import * as ExcelJS from 'exceljs';
 
 // Constants
-const WAIT_TIMEOUT = 1000;
+const WAIT_TIMEOUT = 9000;
 const PRODUCT_CODE_SUFFIX_1 = '11';
 const PRODUCT_CODE_SUFFIX_2 = '12';
 
@@ -163,10 +163,12 @@ test.describe("add successfully product", () => {
         }
 
         try {
-          await dimension.inputPackageDimension(page);
-          await dimension.inputPackageDimensionOption(page);
-          await dimension.inputPackageDimensionOption2(page);
-          console.log('Successfully input all package dimension details');
+          for (let i = 0; i < 2; i++) {
+          await dimension.inputPackageDimension(page,i);
+          await dimension.inputPackageDimensionOption(page,i);
+          await dimension.inputPackageDimensionOption2(page,i);
+          console.log(`Successfully input all package dimension details : option ${i}`);
+          }
         } catch (packageInputError) {
           console.error(`Failed to input package dimension details for product: ${productName}`);
           console.error(`Category: ${category}`);

@@ -404,23 +404,23 @@ export async function selectPackageDimensionYes(page: Page): Promise<void> {
 }
 
 /** Package Dimension */
-export async function inputPackageDimension(page: Page) {
+export async function inputPackageDimension(page: Page,i: number) {
     // Note: Radio button selection should be done separately using selectPackageDimensionYes() or selectPackageDimensionNo()
     // This function only fills in the dimension values
-    await page.locator('input[name="productVariants.0.packageDetails.0.width"]').fill('3.6');
-    await page.locator('input[name="productVariants.0.packageDetails.0.length"]').fill('5.6');
-    await page.locator('input[name="productVariants.0.packageDetails.0.height"]').fill('8.6');
-    await page.locator('input[name="productVariants.0.packageDetails.0.weight"]').fill('9.6');
-    await page.screenshot({ path: 'test-results/inputPackageDimension.png', fullPage: true });
+    await page.locator(`input[name="productVariants.${i}.packageDetails.0.width"]`).fill('3.6');
+    await page.locator(`input[name="productVariants.${i}.packageDetails.0.length"]`).fill('5.6');
+    await page.locator(`input[name="productVariants.${i}.packageDetails.0.height"]`).fill('8.6');
+    await page.locator(`input[name="productVariants.${i}.packageDetails.0.weight"]`).fill('9.6');
+    await page.screenshot({ path: `test-results/inputPackageDimension${i}.png`, fullPage: true });
 }
 
-export async function inputPackageDimensionOption(page: Page) {
+export async function inputPackageDimensionOption(page: Page,i: number) {
     await page.click('text=เพิ่มบรรจุภัณฑ์ที่ 2');
-    await page.locator('input[name="productVariants.0.packageDetails.1.width"]').fill('1.11');
-    await page.locator('input[name="productVariants.0.packageDetails.1.length"]').fill('1.22');
-    await page.locator('input[name="productVariants.0.packageDetails.1.height"]').fill('1.33');
-    await page.locator('input[name="productVariants.0.packageDetails.1.weight"]').fill('1.44');
-    await page.screenshot({ path: 'test-results/inputPackageDimensionOption.png', fullPage: true });
+    await page.locator(`input[name="productVariants.${i}.packageDetails.1.width"]`).fill('1.11');
+    await page.locator(`input[name="productVariants.${i}.packageDetails.1.length"]`).fill('1.22');
+    await page.locator(`input[name="productVariants.${i}.packageDetails.1.height"]`).fill('1.33');
+    await page.locator(`input[name="productVariants.${i}.packageDetails.1.weight"]`).fill('1.44');
+    await page.screenshot({ path: `test-results/inputPackageDimensionOption${i}.png`, fullPage: true });
 }
 
 export async function inputPackageDimensionOptionNovariant(page: Page) {
@@ -432,13 +432,13 @@ export async function inputPackageDimensionOptionNovariant(page: Page) {
     await page.screenshot({ path: 'test-results/inputPackageDimensionOption.png', fullPage: true });
 }
 
-export async function inputPackageDimensionOption2(page: Page) {
+export async function inputPackageDimensionOption2(page: Page,i: number) {
     await page.click('text=เพิ่มบรรจุภัณฑ์ที่ 3');
-    await page.locator('input[name="productVariants.0.packageDetails.2.width"]').fill('3');
-    await page.locator('input[name="productVariants.0.packageDetails.2.length"]').fill('4');
-    await page.locator('input[name="productVariants.0.packageDetails.2.height"]').fill('5');
-    await page.locator('input[name="productVariants.0.packageDetails.2.weight"]').fill('6');
-    await page.screenshot({ path: 'test-results/inputPackageDimensionOption2.png', fullPage: true });
+    await page.locator(`input[name="productVariants.${i}.packageDetails.2.width"]`).fill('3');
+    await page.locator(`input[name="productVariants.${i}.packageDetails.2.length"]`).fill('4');
+    await page.locator(`input[name="productVariants.${i}.packageDetails.2.height"]`).fill('5');
+    await page.locator(`input[name="productVariants.${i}.packageDetails.2.weight"]`).fill('6');
+    await page.screenshot({ path: `test-results/inputPackageDimensionOption2 ${i}.png`, fullPage: true });
 }
 
 /**
